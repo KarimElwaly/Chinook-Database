@@ -1,0 +1,43 @@
+/*  Who are the top 10 customers have purchased?​ */
+SELECT c.CustomerId,
+       c.Country,
+       c.FirstName,
+       c.LastName,
+       c.Phone,
+       c.Email,
+       sum(i.total)AS Invoices
+FROM Invoice AS i
+JOIN Customer AS c ON i.CustomerId=c.CustomerId
+GROUP BY 1
+ORDER BY Invoices DESC
+LIMIT 10 
+
+/*  What are the top 10 albums in sales?​ */
+SELECT a.Title,
+       sum(inv.UnitPrice*inv.Quantity) AS sales
+FROM Album a
+JOIN track t ON a.AlbumId=t.AlbumId
+JOIN InvoiceLine inv ON t.TrackId=inv.TrackId
+GROUP BY 1
+ORDER BY sales DESC
+LIMIT 10 
+
+/*  What are the top 10 artists in sales?​ */
+SELECT ar.Name,
+       sum(inv.UnitPrice*inv.Quantity) AS sales
+FROM Artist ar
+JOIN Album a ON ar.ArtistId=a.ArtistId
+JOIN track t ON a.AlbumId=t.AlbumId
+JOIN InvoiceLine inv ON t.TrackId=inv.TrackId
+GROUP BY 1
+ORDER BY sales DESC
+LIMIT 10 
+
+/*  What the number of sold tracks for each genre?​ */
+SELECT g.name,
+       COUNT(t.TrackId) AS No_Sold_Tracks
+FROM Track t
+JOIN genre g ON t.genreid = g.genreid
+JOIN InvoiceLine inv ON inv.trackid = t.trackid
+GROUP BY 1
+ORDER BY No_Sold_Tracks DESC
